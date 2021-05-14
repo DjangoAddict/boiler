@@ -3,12 +3,12 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from boiler.auth import login_required
+from boiler.blueprints.auth import login_required
 from boiler.db import get_db
 
-bp = Blueprint('blog', __name__)
+blogs = Blueprint('blogs', __name__)
 
-@bp.route('/')
+@blogs.route('/')
 def index():
     db = get_db()
     posts = db.execute(
@@ -18,7 +18,7 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
 
-@bp.route('/create', methods=('GET', 'POST'))
+@blogs.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
     if request.method == 'POST':
@@ -59,7 +59,7 @@ def get_post(id, check_author=True):
 
     return post
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@blogs.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
     post = get_post(id)
@@ -86,7 +86,7 @@ def update(id):
 
     return render_template('blog/update.html', post=post)
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@blogs.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
     get_post(id)

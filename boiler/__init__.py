@@ -1,8 +1,9 @@
 # this containts the app factory and tells python the directory should be treated as a package
 
 import os
-
 from flask import Flask
+
+from .blueprints.auth import auth
 
 
 def create_app(test_config=None):
@@ -33,15 +34,18 @@ def create_app(test_config=None):
 
     # import db.
     from . import db
+
     # import blueprints
-    from . import blog
-    from . import auth
+    # from boiler.blueprints.auth import auth
+    # from boiler.blueprints.blog import blog
+
     # initiate db
     db.init_app(app)
+
     # register apps
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(blog.bp)
+    app.register_blueprint(auth)
+    # app.register_blueprint(blog)
     # you can add URL prefixes here or in blueprint.  I prefer here so they are all seen in one place.
-    app.add_url_rule('/', endpoint='index')
+    # app.add_url_rule('/', endpoint='index')
 
     return app

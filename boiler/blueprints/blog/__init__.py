@@ -1,0 +1,1 @@
+from boiler.blueprints.auth.blog import blog
