@@ -3,12 +3,9 @@
 import os
 from flask import Flask
 
-from .blueprints.auth import auth
-
-
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)# creates flask instance.  
+    app = Flask(__name__, template_folder='templates', instance_relative_config=True)# creates flask instance.  
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'boiler.sqlite'),
@@ -33,18 +30,19 @@ def create_app(test_config=None):
         return 'Hello, World!'
 
     # import db.
-    from . import db
+    from . import extensions
 
     # import blueprints
-    # from boiler.blueprints.auth import auth
-    # from boiler.blueprints.blog import blog
+    from boiler.blueprints.auth import auth
+    from boiler.blueprints.blog import blog
 
+    # extensions(app)
     # initiate db
-    db.init_app(app)
+    db.init_app(app)# possibly initiate from an extension like BSAWF - extensions.py
 
     # register apps
     app.register_blueprint(auth)
-    # app.register_blueprint(blog)
+    app.register_blueprint(blog)
     # you can add URL prefixes here or in blueprint.  I prefer here so they are all seen in one place.
     # app.add_url_rule('/', endpoint='index')
 

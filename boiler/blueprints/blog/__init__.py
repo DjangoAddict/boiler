@@ -1,1 +1,1 @@
-from boiler.blueprints.auth.blog import blog
+from boiler.blueprints.blog.views import blog
